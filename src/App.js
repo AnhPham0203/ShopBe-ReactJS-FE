@@ -1,36 +1,34 @@
-import Header from "./components/Header";
 import ProductList from "./components/ProductList";
-import Footer from "./components/Footer";
-import { useState } from "react";
 import { AppProvider } from "./Context/AppProvider ";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ProductCard from "./components/ProductCard";
+
 import ProductDetail from "./components/ProductDetail";
 import Payment from "./components/Payment";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <div>
-      <AppProvider>
-        <Router>
+      <Router>
+        <AppProvider>
           <div>
-            {/* Header luôn hiển thị */}
-            <Header />
-
             <Routes>
-              {/* Route cho trang danh sách sản phẩm */}
-              <Route path="/" element={<ProductList />} />
+              {/* Các route không yêu cầu Header và Footer */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-              {/* Route cho trang chi tiết sản phẩm */}
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/payment" element={<Payment />} />
+              {/* Các route có Header và Footer */}
+              <Route element={<Layout />}>
+                <Route path="/" element={<ProductList />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/payment" element={<Payment />} />
+              </Route>
             </Routes>
-
-            {/* Footer luôn hiển thị */}
-            <Footer />
           </div>
-        </Router>
-      </AppProvider>
+        </AppProvider>
+      </Router>
     </div>
   );
 }

@@ -48,7 +48,7 @@ const Payment = () => {
 
   return (
     <div className="container mx-auto px-8 py-8">
-      <h1 className="text-3xl font-bold mb-6">Payment Information</h1>
+      <h1 className="text-3xl font-bold mb-6">Thông Tin Thanh Toán</h1>
 
       {/* Phân chia 2 cột */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -117,33 +117,17 @@ const Payment = () => {
 
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded mt-4 hover:bg-blue-800"
+              className="bg-orange-500 text-white px-4 py-2 rounded mt-4 hover:bg-orange-600"
             >
-              Submit Payment
+              Thanh Toán
             </button>
           </form>
         </div>
 
         {/* Chi tiết giỏ hàng */}
         <div className="border p-6 rounded-lg bg-white shadow-md">
-          <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
-          {/* {cart.length > 0 ? (
-            <ul className="space-y-4">
-              {cart.map((item) => (
-                <li key={item.id} className="flex justify-between items-center">
-                  <div>
-                    <p className="font-bold">{item.name}</p>
-                    <p className="text-gray-600">Quantity: {item.quantity}</p>
-                  </div>
-                  <p className="font-bold">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>Your cart is empty.</p>
-          )} */}
+          <h2 className="text-2xl font-bold mb-4">Giỏ Hàng Của Bạn</h2>
+
           <div className="">
             <CartItem cartItems={cart} />
           </div>

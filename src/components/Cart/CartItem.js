@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../Context/AppProvider ";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
 const CartItem = () => {
   const { cart, setCart } = useContext(AppContext);
@@ -59,22 +61,86 @@ const CartItem = () => {
   };
 
   return (
-    <div className="p-5 max-h-64 overflow-y-auto bg-gray-100">
-      <h2 className="text-lg font-semibold mb-3 text-black">Cart Items</h2>
+    // <div className="p-5 max-h-64 overflow-y-auto bg-gray-100">
+    //   <h2 className="text-lg font-semibold mb-3 text-black">Cart Items</h2>
+    //   {cart.length === 0 ? (
+    //     <p className="text-black font-medium">Your cart is empty</p> // Nếu giỏ hàng trống, hiển thị thông báo
+    //   ) : (
+    //     <ul className="space-y-2">
+    //       {cart.map((item, index) => (
+    //         <li
+    //           key={index}
+    //           className="flex justify-between items-center border p-2 bg-white"
+    //         >
+    //           {/* Hiển thị hình ảnh sản phẩm */}
+    //           <img
+    //             alt={item.product.title}
+    //             src={item.product.image} // Đảm bảo bạn có thuộc tính `image` trong dữ liệu sản phẩm
+    //             className="w-16 h-16 object-cover mr-4"
+    //           />
+
+    //           <div className="flex flex-col justify-between w-full">
+    //             {/* Hiển thị tên sản phẩm */}
+    //             <span className="text-black font-medium">
+    //               {item.product.title}
+    //             </span>
+
+    //             {/* Hiển thị giá sản phẩm */}
+    //             <span className="text-black">
+    //               ${(item.product.price * item.quantity).toFixed(2)}
+    //             </span>
+
+    //             {/* Nút tăng giảm số lượng */}
+    //             <div className="flex items-center space-x-2">
+    //               <button
+    //                 onClick={() => handleDecreaseQuantity(item, "decrease")}
+    //                 className="px-2 py-1 bg-gray-300 text-black rounded"
+    //               >
+    //                 -
+    //               </button>
+    //               <span className="text-black">{item.quantity}</span>
+    //               <button
+    //                 onClick={() => handleIncreaseQuantity(item, "increase")}
+    //                 className="px-2 py-1 bg-gray-300 text-black rounded"
+    //               >
+    //                 +
+    //               </button>
+    //             </div>
+    //           </div>
+
+    //           {/* Nút xóa sản phẩm */}
+    //           <button
+    //             onClick={() => handleRemoveFromCart(item.id)}
+    //             className="text-red-500 hover:text-red-700 font-bold ml-4"
+    //           >
+    //             X
+    //           </button>
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   )}
+    //   <div className="cart-total">
+    //     <h3 className="text-black font-medium">
+    //       Total: ${getTotalPrice().toFixed(2)}
+    //     </h3>
+    //   </div>
+    // </div>
+    <div className="p-5 max-h-64 overflow-y-auto bg-gray-100 rounded-lg shadow-md">
+      {/* <h2 className="text-lg font-semibold mb-3 text-black">Giỏ Hàng</h2> */}
       {cart.length === 0 ? (
-        <p className="text-black font-medium">Your cart is empty</p> // Nếu giỏ hàng trống, hiển thị thông báo
+        <p className="text-black font-medium">Giỏ hàng của bạn đang trống</p> // Nếu giỏ hàng trống, hiển thị thông báo
       ) : (
         <ul className="space-y-2">
           {cart.map((item, index) => (
             <li
               key={index}
-              className="flex justify-between items-center border p-2 bg-white"
+              className="flex justify-between items-center border-b p-2 bg-white hover:bg-gray-50 transition duration-300"
             >
               {/* Hiển thị hình ảnh sản phẩm */}
               <img
                 alt={item.product.title}
                 src={item.product.image} // Đảm bảo bạn có thuộc tính `image` trong dữ liệu sản phẩm
-                className="w-16 h-16 object-cover mr-4"
+                className="w-16 h-16 object-cover mr-4 rounded-md"
               />
 
               <div className="flex flex-col justify-between w-full">
@@ -92,16 +158,16 @@ const CartItem = () => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleDecreaseQuantity(item, "decrease")}
-                    className="px-2 py-1 bg-gray-300 text-black rounded"
+                    className="px-2 py-1 bg-gray-300 text-black rounded hover:bg-gray-400 transition duration-200"
                   >
-                    -
+                    <FontAwesomeIcon icon={faMinus} />
                   </button>
                   <span className="text-black">{item.quantity}</span>
                   <button
                     onClick={() => handleIncreaseQuantity(item, "increase")}
-                    className="px-2 py-1 bg-gray-300 text-black rounded"
+                    className="px-2 py-1 bg-gray-300 text-black rounded hover:bg-gray-400 transition duration-200"
                   >
-                    +
+                    <FontAwesomeIcon icon={faPlus} />
                   </button>
                 </div>
               </div>
@@ -111,15 +177,15 @@ const CartItem = () => {
                 onClick={() => handleRemoveFromCart(item.id)}
                 className="text-red-500 hover:text-red-700 font-bold ml-4"
               >
-                X
+                <FontAwesomeIcon icon={faTrashAlt} />
               </button>
             </li>
           ))}
         </ul>
       )}
-      <div className="cart-total">
+      <div className="cart-total mt-4">
         <h3 className="text-black font-medium">
-          Total: ${getTotalPrice().toFixed(2)}
+          Tổng cộng: ${getTotalPrice().toFixed(2)}
         </h3>
       </div>
     </div>

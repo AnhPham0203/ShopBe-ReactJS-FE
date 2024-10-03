@@ -9,7 +9,7 @@ const ProductList = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [goToTop, setGoToTop] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (searchTerm) {
@@ -40,21 +40,25 @@ const ProductList = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setGoToTop(window.scrollY >= 400);
-      // console.log(window.scrollY);
+    const toggleVisibility = () => {
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", toggleVisibility);
+
+    return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
-  // go to top
-  // const handleGoToTop = () => {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: "smooth", // Cuộn trang mượt mà
-  //   });
-  // };
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   if (loading) {
     return <p className="text-center">Loading products...</p>;
@@ -69,7 +73,7 @@ const ProductList = () => {
             key={category}
             className={`px-4 py-2 rounded-md ${
               selectedCategory === category
-                ? "bg-blue-500 text-white"
+                ? "bg-orange-500 text-white"
                 : "bg-gray-200 text-black"
             }`}
             onClick={() => handleCategoryChange(category)}
@@ -80,7 +84,7 @@ const ProductList = () => {
       </div>
 
       {/* Danh sách sản phẩm */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-6">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
@@ -89,32 +93,29 @@ const ProductList = () => {
           <p className="col-span-4 text-center">No products found</p>
         )}
       </div>
-      {goToTop && (
-        <button
-          className="
-      fixed
-      right-5
-      bottom-5
-      bg-black
-      text-white
-      border-none
-      rounded-full
-      w-12
-      h-12
-      text-lg
-      cursor-pointer
-      shadow-md
-      transition-colors
-      duration-300
-      ease-in-out
-      hover:bg-gray-500
-    "
-          onClick={() => window.scroll({ top: 0, behavior: "smooth" })} // Cuộn mượt mà
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "gray")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "black")}
-        >
-          ↑
-        </button>
+      {isVisible && (
+        <div className="fixed bottom-4 right-4">
+          <button
+            onClick={scrollToTop}
+            className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-full shadow-lg transition duration-300"
+            title="Go to top"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </button>
+        </div>
       )}
     </main>
   );

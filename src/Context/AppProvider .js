@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -8,6 +9,8 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -25,61 +28,72 @@ export const AppProvider = ({ children }) => {
 
   // lấy giỏ hàng
 
-  const fetchCart = async () => {
+  const fetchCart = async (email) => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/cart/getCart"
+      const response = await axios.post(
+        `http://localhost:8080/api/cart/getCart`,
+        { email }
       );
-      // console.log(response.data);
+      console.log("GET CART==", email);
+
       setCart(response.data);
     } catch (error) {}
   };
 
   // lưu giỏ hàng
-  const addToCart = async (product) => {
-    try {
-      const respone = await axios.post(
-        "http://localhost:8080/api/cart/save",
-        product
-      );
-      setMessage(respone.data);
-      setShowMessage(true); // Hiển thị thông báo
-
-      // Ẩn thông báo sau 3 giây
-      setTimeout(() => {
-        setShowMessage(false);
-      }, 3000);
-
-      const existingProduct = cart.find(
-        (cartItem) => cartItem.id === product.id
-      );
-      if (existingProduct) {
-        // Tăng số lượng nếu sản phẩm đã có trong giỏ
-        const updatedCart = cart.map((cartItem) =>
-          cartItem.id === product.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
+  const addToCart = async (product, email) => {
+    if (user === null) {
+      navigate("/login");
+    } else {
+      const pid = product.id;
+      try {
+        const respone = await axios.post(
+          "http://localhost:8080/api/cart/save",
+          {
+            pid,
+            email,
+          }
         );
-        setCart(updatedCart);
-      } else {
-        // Thêm sản phẩm mới vào giỏ
-        setCart([...cart, { ...product, quantity: 1 }]);
-      }
+        console.log("User ID ===", email);
+        console.log("PRODUCT=====", product);
 
-      // Lấy lại giỏ hàng sau khi thêm sản phẩm thành công
-      await fetchCart(); // Chờ cho đến khi giỏ hàng được cập nhật
-    } catch (error) {
-      if (error.response) {
-        setMessage(error.response.data);
-      } else {
-        setMessage("Đã xảy ra lỗi khi kết nối đến server");
-      }
-      setShowMessage(true);
+        setMessage(respone.data);
+        setShowMessage(true); // Hiển thị thông báo
 
-      // Ẩn thông báo sau 3 giây
-      setTimeout(() => {
-        setShowMessage(false);
-      }, 3000);
+        // Ẩn thông báo sau 3 giây
+        setTimeout(() => {
+          setShowMessage(false);
+        }, 3000);
+
+        const existingProduct = cart.find((cartItem) => cartItem.id === pid);
+        if (existingProduct) {
+          // Tăng số lượng nếu sản phẩm đã có trong giỏ
+          const updatedCart = cart.map((cartItem) =>
+            cartItem.id === pid
+              ? { ...cartItem, quantity: cartItem.quantity + 1 }
+              : cartItem
+          );
+          setCart(updatedCart);
+        } else {
+          // Thêm sản phẩm mới vào giỏ
+          setCart([...cart, { ...product, quantity: 1 }]);
+        }
+
+        // Lấy lại giỏ hàng sau khi thêm sản phẩm thành công
+        await fetchCart(email); // Chờ cho đến khi giỏ hàng được cập nhật
+      } catch (error) {
+        if (error.response) {
+          setMessage(error.response.data);
+        } else {
+          setMessage("Đã xảy ra lỗi khi kết nối đến server");
+        }
+        setShowMessage(true);
+
+        // Ẩn thông báo sau 3 giây
+        setTimeout(() => {
+          setShowMessage(false);
+        }, 3000);
+      }
     }
   };
   useEffect(() => {
@@ -99,6 +113,9 @@ export const AppProvider = ({ children }) => {
         loading,
         message,
         showMessage,
+        setUser,
+        user,
+        fetchCart,
       }}
     >
       {children}
