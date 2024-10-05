@@ -4,9 +4,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import ProductDetail from "./components/ProductDetail";
 import Payment from "./components/Payment";
-import Login from "./components/Login";
+
 import Register from "./components/Register";
 import Layout from "./components/Layout";
+import Login from "./components/Login";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
                 <Route path="/" element={<ProductList />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/payment" element={<Payment />} />
+                <Route path="/profile" element={<UserProfile />} />
               </Route>
             </Routes>
           </div>

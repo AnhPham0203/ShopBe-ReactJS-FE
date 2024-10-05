@@ -9,13 +9,16 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
+  const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://fakestoreapi.com/products");
+        const response = await axios.get(
+          "http://localhost:8080/api/product/getAll"
+        );
         setProducts(response.data); // Cập nhật danh sách sản phẩm
         setLoading(false); // Tắt trạng thái đang tải
       } catch (error) {
@@ -26,6 +29,26 @@ export const AppProvider = ({ children }) => {
     fetchProducts(); // Gọi hàm lấy dữ liệu
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // Gọi 2 API cùng lúc
+  //       const [commentsResponse, productsResponse] = await axios.all([
+  //         axios.get("http://localhost:8080/api/comment/getComment"),
+  //         axios.get("http://localhost:8080/api/product/getAll"),
+  //       ]);
+  //       setLoading(false);
+  //       // Cập nhật state với dữ liệu từ cả hai API
+  //       setComments(commentsResponse.data);
+  //       setProducts(productsResponse.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []); // Chỉ chạy khi product.id thay đổi
+
   // lấy giỏ hàng
 
   const fetchCart = async (email) => {
@@ -34,7 +57,6 @@ export const AppProvider = ({ children }) => {
         `http://localhost:8080/api/cart/getCart`,
         { email }
       );
-      console.log("GET CART==", email);
 
       setCart(response.data);
     } catch (error) {}
@@ -116,6 +138,7 @@ export const AppProvider = ({ children }) => {
         setUser,
         user,
         fetchCart,
+        comments,
       }}
     >
       {children}

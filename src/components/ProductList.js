@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 // import products from "../data/products";
-import axios from "axios";
+import notfound from "../assets/notfound.png";
 import { AppContext } from "../Context/AppProvider ";
 
 const ProductList = () => {
@@ -90,7 +90,13 @@ const ProductList = () => {
             <ProductCard key={product.id} product={product} />
           ))
         ) : (
-          <p className="col-span-4 text-center">No products found</p>
+          <div className="col-span-full flex justify-center items-center my-10">
+            <img
+              alt="notfound"
+              src={notfound}
+              className="w-2/3 md:w-1/2 lg:w-1/2 h-auto object-cover rounded-lg shadow-lg"
+            />
+          </div>
         )}
       </div>
       {isVisible && (

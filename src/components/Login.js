@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useHistory, useLocation } from "react-router-dom";
 import { AppContext } from "../Context/AppProvider ";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
+  const location = useLocation();
 
   const { setUser, fetchCart } = useContext(AppContext);
 
@@ -30,7 +32,13 @@ const Login = () => {
       } else {
         setUser(respone.data);
         fetchCart(respone.data.email);
-        navigate("/");
+        console.log("location.state?.from==", location.state); //in ra null
+
+        // Kiểm tra xem có đường dẫn trước đó (trang chi tiết sản phẩm) không
+        const redirectTo = location.state?.from || "/";
+        console.log("redirectTo====", redirectTo);
+
+        navigate(redirectTo); // Điều hướng tới trang trước đó hoặc trang chủ nếu không có
       }
 
       setTimeout(() => {

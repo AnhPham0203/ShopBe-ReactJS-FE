@@ -1,31 +1,58 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { AppContext } from "../Context/AppProvider ";
+import CommentSection from "./CommentBox";
+import CommentBox from "./CommentBox";
 
 const ProductDetail = () => {
   const { id } = useParams(); // Lấy ID sản phẩm từ URL
   const [product, setProduct] = useState(null);
+  const [comments, setComments] = useState([]);
 
   const { addToCart, showMessage, message, user } = useContext(AppContext);
   const navigate = useNavigate();
 
+  const location = useLocation();
+  // console.log("LOcation====", location.pathname);
+
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     if (!product || product.id !== id) {
+  //       try {
+  //         const response = await axios.get(
+  //           `http://localhost:8080/api/product/${id}`
+  //         );
+  //         setProduct(response.data); // Cập nhật danh sách sản phẩm
+  //       } catch (error) {
+  //         console.error("Error fetching products:", error);
+  //         // setLoading(false); // Tắt trạng thái đang tải nếu có lỗi
+  //       }
+  //     }
+  //   };
+  //   fetchProducts(); // Gọi hàm lấy dữ liệu
+  // }, [id]);
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      if (!product || product.id !== id) {
-        try {
-          const response = await axios.get(
-            `https://fakestoreapi.com/products/${id}`
-          );
-          setProduct(response.data); // Cập nhật danh sách sản phẩm
-        } catch (error) {
-          console.error("Error fetching products:", error);
-          // setLoading(false); // Tắt trạng thái đang tải nếu có lỗi
-        }
+    const fetchData = async () => {
+      try {
+        // Gọi 2 API cùng lúc
+        const [productResponse, commentsResponse] = await axios.all([
+          axios.get(`http://localhost:8080/api/product/${id}`),
+          axios.get(`http://localhost:8080/api/comment/getComment/${id}`),
+        ]);
+        console.log("ProductDetial==", commentsResponse.data);
+
+        // Cập nhật state với dữ liệu từ cả hai API
+        setProduct(productResponse.data);
+        setComments(commentsResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
-    fetchProducts(); // Gọi hàm lấy dữ liệu
-  }, [id]);
+
+    fetchData();
+  }, [id]); // Chỉ chạy khi id thay đổi
 
   if (!product) {
     return <div>Loading...</div>;
@@ -75,7 +102,7 @@ const ProductDetail = () => {
         <img
           src={product.image}
           alt={product.name}
-          className="w-full md:w-1/2 h-auto object-cover rounded-lg shadow-md"
+          className="w-full md:w-1/6 h-auto object-cover rounded-lg shadow-md"
         />
 
         <div className="flex flex-col justify-between w-full md:w-1/2">
@@ -90,18 +117,22 @@ const ProductDetail = () => {
           </div>
 
           <button
-            className="mt-4 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition duration-300 w-full"
+            className="mt-4 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition duration-300 w-1/4"
             onClick={() => {
               if (user) {
                 addToCart(product, user.email);
               } else {
-                navigate("/login");
+                navigate("/login", { state: { from: location.pathname } });
               }
             }}
           >
             Thêm vào Giỏ Hàng
           </button>
         </div>
+      </div>
+      <div className="w-1/2">
+        {" "}
+        <CommentBox comments={comments} product={product} />
       </div>
     </div>
   );

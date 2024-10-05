@@ -59,7 +59,7 @@ const Header = () => {
               >
                 {/* Hiển thị tên người dùng */}
                 <span className="cursor-pointer text-black">
-                  Chào, {user.name}
+                  Chào, <strong>{user.name}</strong>
                 </span>
 
                 {/* Dropdown khi hover */}
