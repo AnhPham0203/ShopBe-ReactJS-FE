@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.507f8d39.css",
-    "main.js": "/static/js/main.e8fda631.js",
-    "static/media/image.png": "/static/media/image.7f99fbd39bdb015050a8.png",
-    "static/media/notfound.png": "/static/media/notfound.a3e20517707d72956224.png",
-    "index.html": "/index.html",
-    "main.507f8d39.css.map": "/static/css/main.507f8d39.css.map",
-    "main.e8fda631.js.map": "/static/js/main.e8fda631.js.map"
+    "main.css": "/ShopBee-ReactJS-FE/static/css/main.507f8d39.css",
+    "main.js": "/ShopBee-ReactJS-FE/static/js/main.d8d0a98c.js",
+    "static/media/image.png": "/ShopBee-ReactJS-FE/static/media/image.7f99fbd39bdb015050a8.png",
+    "static/media/notfound.png": "/ShopBee-ReactJS-FE/static/media/notfound.a3e20517707d72956224.png",
+    "index.html": "/ShopBee-ReactJS-FE/index.html",
+    "main.507f8d39.css.map": "/ShopBee-ReactJS-FE/static/css/main.507f8d39.css.map",
+    "main.d8d0a98c.js.map": "/ShopBee-ReactJS-FE/static/js/main.d8d0a98c.js.map"
   },
   "entrypoints": [
     "static/css/main.507f8d39.css",
-    "static/js/main.e8fda631.js"
+    "static/js/main.d8d0a98c.js"
   ]
 }
